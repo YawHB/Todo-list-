@@ -21,8 +21,8 @@ function addTodo(todo) {
 
     //Creates a new li element
     const todoLiElement = document.createElement('li');
-    console.log(todoLiElement);
-    if (todo && todo.isCompleted) {
+
+    if (todo.isCompleted) {
         todoLiElement.classList.add('todo-completed');
     }
 
@@ -60,7 +60,7 @@ function updateLS() {
         todos.push({
             /*When pushed, we change the li element to an object, containing the text of the li and if it is completed (boolean)  */
             text: todoEl.innerText,
-            completed: todoEl.classList.contains('todo-completed'),
+            isCompleted: todoEl.classList.contains('todo-completed'),
         });
     });
 
