@@ -32,14 +32,17 @@ function addTodo(todo) {
     `;
 
     document.querySelector('#todos').insertAdjacentHTML('beforeend', html);
+    const todoTrash = document.querySelector(
+        '#todos li:last-child .todo-trash'
+    );
 
-    //!DRAG functionality
+    //******************'DRAG functionality*******************//
 
     document
         .querySelector('#todos li:last-child')
         .setAttribute('draggable', true);
     const liElements = document.querySelectorAll('li');
-    console.log(liElements);
+    // console.log(liElements);
 
     liElements.forEach((li) => {
         li.addEventListener('dragstart', () => {
@@ -70,27 +73,22 @@ function addTodo(todo) {
         newTodoElement.classList.add('todo-completed');
     }
 
-    //Sets the text in a li element to the user input from the input field
-    // -todoLiElement.innerText = todoText;
-
-    // document
-    //     .querySelector('li .todo-trash:last-child')
-    //     .addEventListener('click', () => {
-    //         console.log('click on trash can');
-    //         document.querySelector('li').classList.toggle('todo-completed');
-    //         //Updates localestorage with new changes
-    //         updateLS();
-    //     });
-
-    document
-        .querySelector('#todos li:last-child .todo-trash')
-        .addEventListener('click', (e) => {
-            if (e.target.classList.contains('todo-trash')) {
-                const todoItem = e.target.closest('li'); // Find det nærmeste overordnede li-element
-                todoItem.classList.toggle('todo-completed'); // Toggle klassen på det nærmeste li-element
-                updateLS(); // Opdater local storage efter ændringer
-            }
+    liElements.forEach((todo) => {
+        todo.addEventListener('contextmenu', (e) => {
+            e.preventDefault();
+            todo.remove();
+            updateLS();
         });
+    });
+
+    //Add click event on trash can icon - and toogle the class todo-completed
+    todoTrash.addEventListener('click', (e) => {
+        if (e.target.classList.contains('todo-trash')) {
+            const todoItem = e.target.closest('li'); // Find det nærmeste overordnede li-element
+            todoItem.classList.toggle('todo-completed'); // Toggle klassen på det nærmeste li-element
+            updateLS();
+        }
+    });
 
     input.value = '';
 
