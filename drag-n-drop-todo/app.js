@@ -81,18 +81,21 @@ function addTodo(todo) {
         });
     });
 
-    //Add click event on trash can icon - and toogle the class todo-completed
-    todoTrash.addEventListener('click', (e) => {
-        if (e.target.classList.contains('todo-trash')) {
-            const todoItem = e.target.closest('li'); // Find det nærmeste overordnede li-element
-            todoItem.classList.toggle('todo-completed'); // Toggle klassen på det nærmeste li-element
-            updateLS();
-        }
-    });
+    todoTrash.addEventListener('click', completedTodo);
 
     input.value = '';
 
     updateLS();
+}
+
+//Add click event on trash can icon - and toogle the class todo-completed
+function completedTodo(e) {
+    console.log('Entered: completeTodo');
+    if (e.target.classList.contains('todo-trash')) {
+        const todoItem = e.target.closest('li'); // Find det nærmeste overordnede li-element
+        todoItem.classList.toggle('todo-completed'); // Toggle klassen på det nærmeste li-element
+        updateLS();
+    }
 }
 
 function updateLS() {
