@@ -35,13 +35,14 @@ function addTodo(todo) {
     const todoTrash = document.querySelector(
         '#todos li:last-child .todo-trash'
     );
+    const liElements = document.querySelectorAll('li');
+    const lastAddedTodo = document.querySelector('#todos li:last-child');
 
     //******************'DRAG functionality*******************//
 
     document
         .querySelector('#todos li:last-child')
         .setAttribute('draggable', true);
-    const liElements = document.querySelectorAll('li');
     // console.log(liElements);
 
     liElements.forEach((li) => {
@@ -57,7 +58,7 @@ function addTodo(todo) {
     todosUL.addEventListener('dragover', (e) => {
         e.preventDefault();
         const afterElement = getDragAfterElement(todosUL, e.clientY);
-        console.log(afterElement);
+        // console.log(afterElement);
         const draggable = document.querySelector('.dragging');
         if (afterElement === null) {
             todosUL.appendChild(draggable);
@@ -73,23 +74,26 @@ function addTodo(todo) {
         newTodoElement.classList.add('todo-completed');
     }
 
-    liElements.forEach((todo) => {
-        todo.addEventListener('contextmenu', (e) => {
-            e.preventDefault();
-            todo.remove();
-            updateLS();
-        });
-    });
+    lastAddedTodo.addEventListener('contextmenu', deleteTodo);
 
-    todoTrash.addEventListener('click', completedTodo);
+    todoTrash.addEventListener('click', todoCompleted);
 
     input.value = '';
 
     updateLS();
 }
 
+//Target the related li element and removes the element from the document
+function deleteTodo(e) {
+    e.preventDefault();
+    const todo = e.target.closest('li');
+
+    todo.remove();
+    updateLS();
+}
+
 //Add click event on trash can icon - and toogle the class todo-completed
-function completedTodo(e) {
+function todoCompleted(e) {
     console.log('Entered: completeTodo');
     if (e.target.classList.contains('todo-trash')) {
         const todoItem = e.target.closest('li'); // Find det nærmeste overordnede li-element
@@ -135,7 +139,6 @@ function getDragAfterElement(todosUL, mouseYPosition) {
         (closest, child) => {
             const box = child.getBoundingClientRect();
             const offset = mouseYPosition - box.top - box.height / 2;
-            console.log(offset);
             if (offset < 0 && offset > closest.offset) {
                 return { offset: offset, element: child };
             } else {
